@@ -13,12 +13,15 @@ import {
   CircularProgress
 } from '@mui/material';
 import { Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     user_name: '',
@@ -170,6 +173,16 @@ const Signup = () => {
           >
             {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign Up'}
           </Button>
+
+          {/* Login Link Section */}
+          <Box sx={{ textAlign: 'center', mt: 2 }}>
+            <Typography variant="body2" color="text.secondary">
+              Already have an account?{' '}
+              <Button to="/login" color="primary" sx={{ textTransform: 'none', fontWeight: 600 }} onClick={() => navigate('/login')}>
+                Log In
+              </Button>
+            </Typography>
+          </Box>
         </Stack>
       </Paper>
     </Box>

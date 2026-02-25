@@ -162,7 +162,7 @@ const Login = () => {
                 <Box sx={{ mt: 4, textAlign: 'center' }}>
                     <Typography variant="body2" color="text.secondary">
                         Don't have an account?{' '}
-                        <Link href="#" color="primary" underline="hover" fontWeight={700}>
+                        <Link href="/signup" color="primary" underline="hover" fontWeight={700}>
                             Sign Up
                         </Link>
                     </Typography>
