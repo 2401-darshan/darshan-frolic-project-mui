@@ -1,40 +1,39 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Box, CssBaseline } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import { Box, Toolbar, useTheme } from '@mui/material';
-import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import Navbar from '../components/Navbar'; // Import your extra component
+
+const drawerWidth = 260;
 
 const MainLayout = () => {
   const [open, setOpen] = useState(true);
-  const theme = useTheme();
-  const drawerWidth = 260;
-  const miniWidth = 70;
 
-  const handleDrawerToggle = () => setOpen(!open);
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <Navbar open={open} drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle} />
-      <Sidebar open={open} drawerWidth={drawerWidth} />
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#eef2f6' }}>
+      <CssBaseline />
       
+      <Navbar open={open} toggleDrawer={toggleDrawer} drawerWidth={drawerWidth} />
+      <Sidebar drawerWidth={drawerWidth} open={open} />
+
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           minHeight: '100vh',
-          // Automatically inherits #0B203F from theme background.default
-          backgroundColor: 'background.default',
-          transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-          }),
-          marginLeft: 0, 
-          width: { sm: `calc(100% - ${open ? drawerWidth : miniWidth}px)` },
+          display: 'flex',
+          flexDirection: 'column',
+          width: `calc(100% - ${open ? drawerWidth : 70}px)`,
+          pt: '50px'
         }}
       >
-        <Toolbar /> 
-        <Outlet />
+        <Box sx={{ flexGrow: 1, bgcolor: '#eef2f6', p: 3 }}>
+          <Outlet />
+        </Box>
       </Box>
     </Box>
   );

@@ -97,7 +97,8 @@ export default function InstitutePage() {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
+                          {column.format && typeof value === 
+                          'number'
                             ? column.format(value)
                             : value}
                         </TableCell>

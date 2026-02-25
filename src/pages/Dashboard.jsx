@@ -21,6 +21,7 @@ import {
     DeveloperBoard,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import Footer from './Footer';
 
 const features = [
     {
@@ -210,6 +211,7 @@ const Dashboard = () => {
                     ))}
                 </Grid>
             </Container>
+            <Footer />
         </Box>
     );
 };

@@ -1,89 +1,127 @@
+import React, { useState } from 'react';
 import {
-    Alert,
     Box,
-    Button,
-    Container,
-    Paper,
-    TextField,
     Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+    TextField,
+    Button,
+    Checkbox,
+    FormControlLabel,
+    Link,
+    Paper,
+    Stack,
+    IconButton,
+    InputAdornment,
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-function LoginPage() {
-    const [data, setData] = useState({ UserName: "", Password: "" });
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-    };
+const Login = () => {
+    const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <Container maxWidth="sm">
-            <Box
+        <Box
+            sx={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                bgcolor: '#eef2f6', // Your dashboard background color
+                p: 2,
+            }}
+        >
+            <Paper
+                elevation={0}
                 sx={{
-                    marginTop: 8,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
+                    p: { xs: 4, md: 6 },
+                    width: '100%',
+                    maxWidth: 450,
+                    borderRadius: 4,
+                    boxShadow: '0 10px 40px rgba(0,0,0,0.04)',
+                    border: '1px solid',
+                    borderColor: 'grey.200',
                 }}
             >
-                <Paper elevation={3} sx={{ padding: 4, width: "100%" }}>
-                    <Typography component="h1" variant="h4" align="center" gutterBottom>
-                        Frolic Login
+                {/* Header */}
+                <Box sx={{ mb: 5, textAlign: 'left' }}>
+                    <Typography variant="h4" fontWeight={900} color="#111827" gutterBottom>
+                        Hi, Welcome Back
                     </Typography>
-                    <Typography
-                        component="h2"
-                        variant="h6"
-                        align="center"
-                        color="textSecondary"
-                        gutterBottom
-                    >
-                        Sign In
+                    <Typography variant="body1" color="text.secondary">
+                        Login to access your Frolic 2026 Dashboard.
                     </Typography>
-                    {error && (
-                        <Alert severity="error" sx={{ mt: 2 }}>
-                            {error}
-                        </Alert>
-                    )}
-                    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="username"
-                            label="Username"
-                            name="username"
-                            autoComplete="username"
-                            autoFocus
-                            onChange={(e) => setData({ ...data, UserName: e.target.value })}
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            onChange={(e) => setData({ ...data, Password: e.target.value })}
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Sign In
-                        </Button>
-                    </Box>
-                </Paper>
-            </Box>
-        </Container>
-    );
-}
+                </Box>
 
-export default LoginPage;
+                {/* Form Fields */}
+                <Stack spacing={3}>
+                    <TextField
+                        fullWidth
+                        label="Email Address"
+                        variant="outlined"
+                        placeholder="name@example.com"
+                        InputLabelProps={{ shrink: true }}
+                        sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                    />
+
+                    <Box>
+                        <TextField
+                            fullWidth
+                            label="Password"
+                            type={showPassword ? 'text' : 'password'}
+                            variant="outlined"
+                            placeholder="Enter password"
+                            InputLabelProps={{ shrink: true }}
+                            sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                        <Box sx={{ textAlign: 'right', mt: 1 }}>
+                            <Link href="#" variant="caption" color="primary" underline="hover" fontWeight={600}>
+                                Forgot Password?
+                            </Link>
+                        </Box>
+                    </Box>
+
+                    <FormControlLabel
+                        control={<Checkbox defaultChecked size="small" />}
+                        label={<Typography variant="body2">Keep me logged in</Typography>}
+                    />
+
+                    <Button
+                        fullWidth
+                        size="large"
+                        variant="contained"
+                        sx={{
+                            py: 1.5,
+                            borderRadius: 2,
+                            textTransform: 'none',
+                            fontWeight: 700,
+                            fontSize: '1rem',
+                            bgcolor: '#1890ff',
+                            boxShadow: '0 8px 16px rgba(24, 144, 255, 0.24)',
+                            '&:hover': { bgcolor: '#096dd9' },
+                        }}
+                    >
+                        Login
+                    </Button>
+                </Stack>
+
+                <Box sx={{ mt: 4, textAlign: 'center' }}>
+                    <Typography variant="body2" color="text.secondary">
+                        Don't have an account?{' '}
+                        <Link href="#" color="primary" underline="hover" fontWeight={700}>
+                            Sign Up
+                        </Link>
+                    </Typography>
+                </Box>
+            </Paper>
+        </Box>
+    );
+};
+
+export default Login;

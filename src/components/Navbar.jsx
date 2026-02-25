@@ -18,22 +18,33 @@ const Navbar = ({ drawerWidth, open, handleDrawerToggle }) => {
     const handleOpenProfile = (event) => setAnchorEl(event.currentTarget);
     const handleCloseProfile = () => setAnchorEl(null);
 
+    // Mini sidebar width (standard for Mantis/Material dashboards)
+    const miniWidth = 70;
+
     return (
         <AppBar
             position="fixed"
             elevation={0}
             sx={{
                 zIndex: (theme) => theme.zIndex.drawer + 1,
-                width: { sm: `calc(100% - ${open ? drawerWidth : 70}px)` },
-                ml: { sm: `${open ? drawerWidth : 70}px` },
-                bgcolor: 'background.paper', // Pure White
+                // --- SLIDABLE LOGIC START ---
+                width: { 
+                    sm: `calc(100% - ${open ? drawerWidth : miniWidth}px)` 
+                },
+                ml: { 
+                    sm: `${open ? drawerWidth : miniWidth}px` 
+                },
+                transition: theme.transitions.create(['width', 'margin'], {
+                    easing: theme.transitions.easing.sharp,
+                    duration: open 
+                        ? theme.transitions.duration.enteringScreen 
+                        : theme.transitions.duration.leavingScreen,
+                }),
+                // --- SLIDABLE LOGIC END ---
+                bgcolor: 'background.paper',
                 color: 'text.primary',
                 borderBottom: '1px solid',
                 borderColor: 'divider',
-                transition: theme.transitions.create(['width', 'margin'], {
-                    easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.leavingScreen,
-                }),
             }}
         >
             <Toolbar sx={{ justifyContent: 'space-between' }}>
@@ -44,7 +55,7 @@ const Navbar = ({ drawerWidth, open, handleDrawerToggle }) => {
                         onClick={handleDrawerToggle}
                         edge="start"
                         sx={{
-                            bgcolor: 'grey.100', // Requested Change
+                            bgcolor: 'grey.100',
                             color: 'text.secondary',
                             borderRadius: '7px',
                             border: '1px solid',
@@ -65,7 +76,7 @@ const Navbar = ({ drawerWidth, open, handleDrawerToggle }) => {
                             display: 'flex',
                             alignItems: 'center',
                             width: { xs: 150, sm: 300 },
-                            bgcolor: 'grey.100', // Requested Change
+                            bgcolor: 'grey.100',
                             boxShadow: 'none',
                             borderRadius: '7px',
                             border: '1px solid',
@@ -101,7 +112,7 @@ const Navbar = ({ drawerWidth, open, handleDrawerToggle }) => {
                     >
                         <Avatar
                             alt="User"
-                            src="./src/assets/avatar-1.jpeg"
+                            src="./src/assets/avatar-1.jpeg" // Ensure path is correct
                             sx={{ width: 34, height: 34 }}
                         />
                     </Stack>
