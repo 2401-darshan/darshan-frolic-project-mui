@@ -11,11 +11,47 @@ import {
     Stack,
     IconButton,
     InputAdornment,
+    Alert, // Added for feedback
+    CircularProgress // Added for loading state
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Login = () => {
+    // 1. Form and UI State
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // 2. Login Handler
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+
+        try {
+            const response = await fetch('https://resback.sampaarsh.cloud/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Login successful:', data);
+            } else {
+                setError(data.message || 'Login failed. Please check your credentials.');
+            }
+        } catch (err) {
+            setError('Network error. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <Box
@@ -24,12 +60,14 @@ const Login = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                bgcolor: '#eef2f6', // Your dashboard background color
+                bgcolor: '#eef2f6',
                 p: 2,
             }}
         >
             <Paper
                 elevation={0}
+                component="form" // Change to form for enter-key submission
+                onSubmit={handleLogin}
                 sx={{
                     p: { xs: 4, md: 6 },
                     width: '100%',
@@ -50,13 +88,18 @@ const Login = () => {
                     </Typography>
                 </Box>
 
-                {/* Form Fields */}
+                {/* Error Alert */}
+                {error && <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>{error}</Alert>}
+
                 <Stack spacing={3}>
                     <TextField
                         fullWidth
+                        required
                         label="Email Address"
                         variant="outlined"
                         placeholder="name@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         InputLabelProps={{ shrink: true }}
                         sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
                     />
@@ -64,10 +107,13 @@ const Login = () => {
                     <Box>
                         <TextField
                             fullWidth
+                            required
                             label="Password"
                             type={showPassword ? 'text' : 'password'}
                             variant="outlined"
                             placeholder="Enter password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             InputLabelProps={{ shrink: true }}
                             sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
                             InputProps={{
@@ -95,7 +141,9 @@ const Login = () => {
                     <Button
                         fullWidth
                         size="large"
+                        type="submit" // Triggers handleLogin
                         variant="contained"
+                        disabled={loading}
                         sx={{
                             py: 1.5,
                             borderRadius: 2,
@@ -107,7 +155,7 @@ const Login = () => {
                             '&:hover': { bgcolor: '#096dd9' },
                         }}
                     >
-                        Login
+                        {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
                     </Button>
                 </Stack>
 
