@@ -11,27 +11,27 @@ import {
     Stack,
     IconButton,
     InputAdornment,
-    Alert, // Added for feedback
-    CircularProgress // Added for loading state
+    Alert,
+    CircularProgress
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    // 1. Form and UI State
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // 2. Login Handler
+    const navigate = useNavigate();
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
         try {
-            const response = await fetch('https://resback.sampaarsh.cloud/users/login', {
+            const response = await fetch('/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ const Login = () => {
         >
             <Paper
                 elevation={0}
-                component="form" // Change to form for enter-key submission
+                component="form"
                 onSubmit={handleLogin}
                 sx={{
                     p: { xs: 4, md: 6 },
@@ -78,7 +78,6 @@ const Login = () => {
                     borderColor: 'grey.200',
                 }}
             >
-                {/* Header */}
                 <Box sx={{ mb: 5, textAlign: 'left' }}>
                     <Typography variant="h4" fontWeight={900} color="#111827" gutterBottom>
                         Hi, Welcome Back
@@ -88,7 +87,6 @@ const Login = () => {
                     </Typography>
                 </Box>
 
-                {/* Error Alert */}
                 {error && <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>{error}</Alert>}
 
                 <Stack spacing={3}>
@@ -141,7 +139,7 @@ const Login = () => {
                     <Button
                         fullWidth
                         size="large"
-                        type="submit" // Triggers handleLogin
+                        type="submit"
                         variant="contained"
                         disabled={loading}
                         sx={{
@@ -162,9 +160,9 @@ const Login = () => {
                 <Box sx={{ mt: 4, textAlign: 'center' }}>
                     <Typography variant="body2" color="text.secondary">
                         Don't have an account?{' '}
-                        <Link href="/signup" color="primary" underline="hover" fontWeight={700}>
-                            Sign Up
-                        </Link>
+                        <Button to="/signup" color="primary" sx={{ textTransform: 'none', fontWeight: 600 }} onClick={() => navigate('/signup')}>
+                            Sign up
+                        </Button>
                     </Typography>
                 </Box>
             </Paper>
