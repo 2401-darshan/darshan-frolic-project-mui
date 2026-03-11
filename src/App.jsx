@@ -15,11 +15,17 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route element={<MainLayout />}>
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/" element={<Navigate to="/login" replace />} />
+
+                {/* Authentication Routes (No Sidebar/Navbar) */}
+                <Route element={<AuthLayout />}>
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
+                </Route>
+
+                {/* Main Application Routes (With Sidebar/Nav) */}
+                <Route element={<MainLayout />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/event" element={<EventPage />} />
                     <Route path="/department" element={<DepartmentPage />} />
                     <Route path="/institute" element={<InstitutePage />} />

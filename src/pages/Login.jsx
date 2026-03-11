@@ -16,10 +16,16 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../Api/Axios';
+
+
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [data, setData] = useState({
+        EmailAddress: "",
+        UserPassword: ""
+    });
+
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -31,23 +37,16 @@ const Login = () => {
         setError(null);
 
         try {
-            const response = await fetch('/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                console.log('Login successful:', data);
-            } else {
-                setError(data.message || 'Login failed. Please check your credentials.');
-            }
+            const payload = {
+                EmailAddress: data.EmailAddress.trim(),
+                UserPassword: data.UserPassword
+            };
+            const response = await api.post('/auth/login', payload);
+            localStorage.setItem("token", "true");
+            navigate('/dashboard');
         } catch (err) {
-            setError('Network error. Please try again later.');
+            const errorMessage = err.response?.data?.message || 'Login failed. Please check your credentials.';
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -93,36 +92,19 @@ const Login = () => {
                     <TextField
                         fullWidth
                         required
-                        label="Email Address"
+                        label="EmailAddress"
                         variant="outlined"
-                        placeholder="name@example.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        InputLabelProps={{ shrink: true }}
-                        sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                        onChange={(e) => setData({ ...data, EmailAddress: e.target.value })}
                     />
 
                     <Box>
                         <TextField
                             fullWidth
                             required
-                            label="Password"
+                            label="UserPassword"
                             type={showPassword ? 'text' : 'password'}
                             variant="outlined"
-                            placeholder="Enter password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            InputLabelProps={{ shrink: true }}
-                            sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
+                            onChange={(e) => setData({ ...data, UserPassword: e.target.value })}
                         />
                         <Box sx={{ textAlign: 'right', mt: 1 }}>
                             <Link href="#" variant="caption" color="primary" underline="hover" fontWeight={600}>

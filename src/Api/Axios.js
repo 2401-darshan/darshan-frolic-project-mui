@@ -1,5 +1,7 @@
-const api = axios.create({
-    baseURL: 'http://localhost:5173/api',
+import axios from "axios";
+
+export const api = axios.create({
+    baseURL: 'http://localhost:2000/api',
     withCredentials: true,
 })
 
@@ -10,5 +12,3 @@ api.interceptors.request.use((config) => {
     }
     return config;
 });
-
-export default api;
