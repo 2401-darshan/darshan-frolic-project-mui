@@ -59,8 +59,6 @@ const Signup = () => {
       }}
     >
       <Paper
-
-
         sx={{
           p: 6,
           width: "100%",

@@ -29,6 +29,7 @@ function App() {
                     <Route path="/event" element={<EventPage />} />
                     <Route path="/department" element={<DepartmentPage />} />
                     <Route path="/institute" element={<InstitutePage />} />
+                    <Route path='/institute/:id' element={<InstitutePage />} />
                 </Route>
             </Routes>
         </BrowserRouter>
