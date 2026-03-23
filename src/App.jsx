@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
+import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
-import Signup from './pages/Signup';
+import Register from './pages/Register';
 
 import EventPage from './pages/EventPage';
 import DepartmentPage from './pages/DepartmentPage';
@@ -17,19 +18,21 @@ function App() {
             <Routes>
                 <Route path="/" element={<Navigate to="/login" replace />} />
 
-                {/* Authentication Routes (No Sidebar/Navbar) */}
                 <Route element={<AuthLayout />}>
                     <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/register" element={<Register />} />
                 </Route>
 
-                {/* Main Application Routes (With Sidebar/Nav) */}
-                <Route element={<MainLayout />}>
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/event" element={<EventPage />} />
-                    <Route path="/department" element={<DepartmentPage />} />
-                    <Route path="/institute" element={<InstitutePage />} />
-                    <Route path='/institute/:id' element={<InstitutePage />} />
+                <Route element={<ProtectedRoute />}>
+                    <Route element={<MainLayout />}>
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/event" element={<EventPage />} />
+                        <Route path='/event/:id' element={<EventPage />} />
+                        <Route path="/department" element={<DepartmentPage />} />
+                        <Route path="/department/:id" element={<DepartmentPage />} />
+                        <Route path="/institute" element={<InstitutePage />} />
+                        <Route path='/institute/:id' element={<InstitutePage />} />
+                    </Route>
                 </Route>
             </Routes>
         </BrowserRouter>

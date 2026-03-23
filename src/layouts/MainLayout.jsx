@@ -14,7 +14,7 @@ const MainLayout = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#eef2f6' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <CssBaseline />
       
       <Navbar open={open} toggleDrawer={toggleDrawer} drawerWidth={drawerWidth} />
@@ -28,10 +28,10 @@ const MainLayout = () => {
           display: 'flex',
           flexDirection: 'column',
           width: `calc(100% - ${open ? drawerWidth : 70}px)`,
-          pt: '50px'
+          pt: '60px'
         }}
       >
-        <Box sx={{ flexGrow: 1, bgcolor: '#eef2f6', p: 3 }}>
+        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
           <Outlet />
         </Box>
       </Box>

@@ -10,6 +10,19 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { api } from "../Api/Axios";
 
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const instituteTheme = createTheme({
+  palette: {
+    mode: "dark",
+    background: {
+      default: "#1f2937",
+      paper: "#374151",
+    },
+    primary: { main: "#1890ff" },
+  },
+});
+
 const rowsPerPage = 10;
 
 function InstitutePage() {
@@ -29,8 +42,18 @@ function InstitutePage() {
   const totalPages = Math.ceil(institutes.length / rowsPerPage);
   const paginatedData = institutes.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
-  // ── 1. Fetch all institutes on mount ──────────────────────────────────────
+  const [isAdmin, setIsAdmin] = useState(false);
+
   useEffect(() => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setIsAdmin(payload.isAdmin === true || payload.role === "admin" || payload.UserRole === "admin" || payload.role === 1);
+      }
+    } catch (e) {
+      console.error("Token decoding failed", e);
+    }
     fetchAllInstitutes();
   }, []);
 
@@ -57,7 +80,6 @@ function InstitutePage() {
     }
   };
 
-  // ── 2. Fetch single institute by ID ───────────────────────────────────────
   const fetchInstituteById = async (id) => {
     try {
       const res = await api.get(`/institute/${id}`);
@@ -90,7 +112,6 @@ function InstitutePage() {
     setOpen(true);
   };
 
-  // ── 3. Open Edit dialog and pre-fill form from API ────────────────────────
   const handleOpenEdit = async (institute) => {
     setEditId(institute.id);
     setForm({
@@ -103,7 +124,6 @@ function InstitutePage() {
     await fetchInstituteById(institute.id);
   };
 
-  // ── 4. Delete ─────────────────────────────────────────────────────────────
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this institute?")) {
       try {
@@ -116,10 +136,8 @@ function InstitutePage() {
     }
   };
 
-  // ── 5. Save — Create or Update based on editId ───────────────────────────
   const handleSave = async () => {
     if (editId) {
-      // UPDATE: PATCH /api/institute/:id
       try {
         const res = await api.patch(`/institute/${editId}`, form);
         const updated = res.data.updatedInstitute;
@@ -127,12 +145,12 @@ function InstitutePage() {
         setInstitutes(institutes.map((inst) =>
           inst.id === editId
             ? {
-                id: updated._id,
-                name: updated.InstituteName,
-                image: updated.InstituteImage,
-                description: updated.InstituteDescription,
-                coordinatorId: updated.InstituteCoOrdinatorID,
-              }
+              id: updated._id,
+              name: updated.InstituteName,
+              image: updated.InstituteImage,
+              description: updated.InstituteDescription,
+              coordinatorId: updated.InstituteCoOrdinatorID,
+            }
             : inst
         ));
 
@@ -142,7 +160,6 @@ function InstitutePage() {
         alert("Failed to update institute. Make sure you have Admin permissions.");
       }
     } else {
-      // CREATE: POST /api/institute
       try {
         const res = await api.post("/institute", form);
         const newInstitute = res.data.institute;
@@ -167,17 +184,20 @@ function InstitutePage() {
   };
 
   return (
-    <Box p={4}>
+    <ThemeProvider theme={instituteTheme}>
+      <Box p={4} sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.primary" }}>
       <Box display="flex" justifyContent="space-between" mb={3} alignItems="center">
         <Box>
           <Typography variant="h5" fontWeight={700}>Institutes Management</Typography>
           <Typography variant="body2" color="text.secondary">
-            Manage all institutes of our university here. 
+            Manage all institutes of our university here.
           </Typography>
         </Box>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenAdd} sx={{ borderRadius: 2 }}>
-          Add Institute
-        </Button>
+        {isAdmin && (
+          <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenAdd} sx={{ borderRadius: 2 }}>
+            Add Institute
+          </Button>
+        )}
       </Box>
 
       {loading ? (
@@ -187,13 +207,12 @@ function InstitutePage() {
       ) : (
         <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: "0 4px 20px rgba(0,0,0,0.05)" }}>
           <Table>
-            <TableHead sx={{ bgcolor: "#f4f6f8" }}>
+            <TableHead sx={{ bgcolor: "rgba(0,0,0,0.2)" }}>
               <TableRow>
                 <TableCell sx={{ fontWeight: 600 }}>ID</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Institute Name</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Description</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Coordinator ID</TableCell>
-                <TableCell align="left" sx={{ fontWeight: 600 }}>Actions</TableCell>
+                {isAdmin && <TableCell align="left" sx={{ fontWeight: 600 }}>Actions</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -210,17 +229,18 @@ function InstitutePage() {
                     <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
                     <TableCell sx={{ fontWeight: 500 }}>{row.name}</TableCell>
                     <TableCell>{row.description}</TableCell>
-                    <TableCell>{row.coordinatorId}</TableCell>
-                    <TableCell align="right">
-                      <Stack direction="row" spacing={1} justifyContent="flex-start">
-                        <IconButton color="primary" size="small" onClick={() => handleOpenEdit(row)}>
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton color="error" size="small" onClick={() => handleDelete(row.id)}>
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </Stack>
-                    </TableCell>
+                    {isAdmin && (
+                      <TableCell align="right">
+                        <Stack direction="row" spacing={1} justifyContent="flex-start">
+                          <IconButton color="primary" size="small" onClick={() => handleOpenEdit(row)}>
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                          <IconButton color="error" size="small" onClick={() => handleDelete(row.id)}>
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </Stack>
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))
               )}
@@ -241,7 +261,7 @@ function InstitutePage() {
         </Button>
       </Box>
 
-      <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm" PaperProps={{ sx: { bgcolor: '#111827', backgroundImage: 'none' } }}>
         <DialogTitle sx={{ fontWeight: 700 }}>
           {editId ? "Edit Institute Details" : "Add New Institute"}
         </DialogTitle>
@@ -254,7 +274,7 @@ function InstitutePage() {
           </Stack>
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
-          <Button onClick={() => setOpen(false)} color="inherit">Cancel</Button>
+          <Button onClick={() => setOpen(false)} color="inherit" variant="outlined">Cancel</Button>
           <Button
             variant="contained"
             onClick={handleSave}
@@ -264,7 +284,8 @@ function InstitutePage() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+      </Box>
+    </ThemeProvider>
   );
 }
 

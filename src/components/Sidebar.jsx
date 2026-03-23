@@ -18,7 +18,7 @@ const menuGroups = [
         subheader: 'AUTHENTICATION',
         items: [
             { text: 'Login', icon: <Login />, path: '/login' },
-            { text: 'Signup', icon: <PersonAdd />, path: '/signup' },
+            { text: 'Register', icon: <PersonAdd />, path: '/register' },
         ]
     },
     {
@@ -116,7 +116,7 @@ const Sidebar = ({ drawerWidth, open }) => {
 
             <Box sx={{ p: 1.5, pb: 2 }}>
                 <Divider sx={{ borderColor: 'rgba(255,255,255,0.05)', mb: 1 }} />
-                <ListItemButton onClick={() => navigate('/')} sx={{ borderRadius: '8px', justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
+                <ListItemButton onClick={() => { localStorage.removeItem('token'); navigate('/login'); }} sx={{ borderRadius: '8px', justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
                     <ListItemIcon sx={{ minWidth: 0, mr: open ? 2 : 'auto', justifyContent: 'center', color: '#9ca3af' }}>
                         <Logout />
                     </ListItemIcon>

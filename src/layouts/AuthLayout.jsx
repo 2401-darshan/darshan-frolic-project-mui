@@ -1,9 +1,11 @@
 import { Outlet } from 'react-router-dom';
+import { CssBaseline } from '@mui/material';
 
 const AuthLayout = () => {
     return (
         <>
-            <Outlet />;
+            <CssBaseline />
+            <Outlet />
         </>
     )
 };

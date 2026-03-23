@@ -89,7 +89,7 @@ const features = [
 const Dashboard = () => {
     const navigate = useNavigate();
     return (
-        <Box sx={{ minHeight: '100vh', pt: 8, pb: 12 }}>
+        <Box sx={{ minHeight: '100vh', pt: 12, pb: 12, bgcolor: '#1f2937' }}>
             <Container maxWidth="lg">
                 {/* Header Section */}
                 <Box sx={{ textAlign: 'center', mb: 8, mx: 'auto', maxWidth: 800 }}>
@@ -97,7 +97,7 @@ const Dashboard = () => {
                         variant="h2"
                         sx={{
                             fontWeight: 900,
-                            color: '#111827',
+                            color: '#fff',
                             mb: 2,
                             letterSpacing: '-1px',
                         }}
@@ -107,7 +107,7 @@ const Dashboard = () => {
                     <Typography
                         variant="h5"
                         sx={{
-                            color: 'text.secondary',
+                            color: '#9ca3af',
                             fontWeight: 400,
                             mb: 4,
                             lineHeight: 1.5,
@@ -146,14 +146,14 @@ const Dashboard = () => {
                                     width: '100%',
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    bgcolor: '#ffffff',
-                                    borderRadius: 5, // Slightly rounder corners to match the image
-                                    border: 'none',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                                    bgcolor: '#374151',
+                                    borderRadius: 5,
+                                    border: '1px solid rgba(255,255,255,0.05)',
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
                                     transition: 'all 0.3s ease-in-out',
                                     '&:hover': {
                                         transform: 'translateY(-6px)',
-                                        boxShadow: '0 12px 24px rgba(0,0,0,0.08)',
+                                        boxShadow: '0 12px 24px rgba(0,0,0,0.4)',
                                         '& .icon-box': {
                                             bgcolor: 'primary.main',
                                             color: '#ffffff',
@@ -169,9 +169,9 @@ const Dashboard = () => {
                                             className="icon-box"
                                             sx={{
                                                 p: 1.5,
-                                                borderRadius: 3, // Rounder icon box
-                                                bgcolor: '#e6f4ff', // Light blue tint matching the image
-                                                color: 'primary.main',
+                                                borderRadius: 3, 
+                                                bgcolor: 'rgba(24, 144, 255, 0.12)', 
+                                                color: '#1890ff',
                                                 transition: 'all 0.3s ease',
                                                 display: 'flex',
                                                 alignItems: 'center',
@@ -188,7 +188,7 @@ const Dashboard = () => {
                                                 sx={{
                                                     fontWeight: 700,
                                                     mb: 1,
-                                                    color: '#111827',
+                                                    color: '#f3f4f6',
                                                     fontSize: '1.1rem'
                                                 }}
                                             >
@@ -197,7 +197,7 @@ const Dashboard = () => {
                                             <Typography
                                                 variant="body2"
                                                 sx={{
-                                                    color: 'text.secondary',
+                                                    color: '#d1d5db',
                                                     lineHeight: 1.6,
                                                 }}
                                             >
